@@ -1,6 +1,6 @@
 # Token Recover Self-Service Tools
 
-A web-based tool for recovering BEP2/BEP8 tokens from [BNB Beacon Chain](https://www.bnbchain.org/) to [BNB Smart Chain (BSC)](https://www.bnbchain.org/en/bnb-smart-chain).
+A self-service web tool for recovering BEP2/BEP8 tokens from BNB Beacon Chain to [BNB Chain (BSC)](https://www.bnbchain.org/en/bnb-smart-chain).
 
 ## Overview
 
@@ -45,12 +45,9 @@ npm run dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## NOTICE!!!
-Please strictly follow the steps on the page to perform recovery.
+> **⚠️ NOTICE:** Please strictly follow the steps on the page to perform recovery. Before proceeding, you can read the example below and check the screenshots.
 
-Before proceeding, you can read the example below and check the screenshots.
-
-## Recover Asset Example on BSC Mainnet
+## Step-by-Step Recovery Example (BSC Mainnet)
 
 > **Note:** The addresses, signatures, and keys below are from a team-controlled test wallet for demonstration purposes only. They do not represent real user data.
 
