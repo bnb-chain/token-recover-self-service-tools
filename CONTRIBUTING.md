@@ -81,4 +81,4 @@ Open a PR against the `main` branch. Fill in the PR template and link any relate
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing, you agree that your contributions will be licensed under the [Innovation-Enabling Source Code License](LICENSE).
