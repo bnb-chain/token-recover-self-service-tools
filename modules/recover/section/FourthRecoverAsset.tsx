@@ -53,7 +53,7 @@ export const RecoverAsset = () => {
     setError("");
     const payload = {
       tokenSymbol: strTo32Bytes(symbol),
-      amount: ethers.BigNumber.from(_amount).toHexString(),
+      amount: ethers.toBeHex(BigInt(_amount)),
       ownerSignature,
       ownerPubKey,
       approvalSignature,
