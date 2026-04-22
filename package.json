@@ -1,7 +1,7 @@
 {
   "name": "token-recover-self-service-tool",
   "version": "0.1.0",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
