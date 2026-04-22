@@ -4,49 +4,25 @@ Copyright © BNB Chain
 
 -----------------------------------------------------------------------------
 
-“Licensed Work” shall mean the work of authorship, whether in source code or
-object code form or otherwise, made available under this license, as
-indicated by a notice that is included in or attached to the work.
 
-BNB Chain (the “Licensor”) hereby grants you the right to copy, modify, create derivative
-works, redistribute, and make non-production and non-commercial use of the
-Licensed Work solely for your internal purposes. Without limiting the
-generality of the foregoing, you may not use the Licensed Work (or any
-information therein) for the purpose of creating, publishing, deploying,
-launching or offering any blockchain or protocols (whether in mainnet,
-testnet, devnet, beta or alpha versions) outside of personal, non-production
-and non-commercial environments.
+“Licensed Work” shall mean the work of authorship, whether in source code or object code form or otherwise, made available under this license, as indicated by a notice that is included in or attached to the work.
 
-Notwithstanding the foregoing, on the date that is 4 years after
-the date that the Licensor has publicly uploaded the specific code of the
-Licensed Work that you are using (the “Change Date”), the license herein
-shall automatically terminate and you shall have the right to then use the
-Licensed Work pursuant to the terms of the Apache 2.0 license.
+“Commercial Use” means any use, directly or indirectly, for revenue generation, fee-based services, integration into a product or service offered to third parties, operation of a business, or use by or on behalf of any organization (whether or not a fee is charged specifically for the Licensed Work).
 
-All copies of the original and modified Licensed Work, and derivative works
-of the Licensed Work, are subject to this License. This License applies
-separately for each version of the Licensed Work and the Change Date may
-vary for each version of the Licensed Work released by Licensor.
+BNB Chain (the “Licensor”) hereby grants you the right to copy, modify, create derivative works, redistribute, and make non-production and non-commercial use of the Licensed Work solely for your internal purposes. Without limiting the generality of the foregoing, you may not use the Licensed Work (or any information therein) for the purpose of creating, publishing, deploying, launching or offering any blockchain or protocols (whether in mainnet, testnet, devnet, beta or alpha versions) outside of personal, non-production and non-commercial environments.
 
-You must conspicuously display this License on each original or modified
-copy of the Licensed Work. If you receive the Licensed Work in original or
-modified form from a third party, the terms and conditions set forth in this
-License apply to your use of that work.
+Without limiting the foregoing, you may not, and may not permit any third party to: (i) use the Licensed Work for any Commercial Use; (ii) host, deploy, or make the Licensed Work available as a service or platform to third parties; or (iii) develop, offer, or provide any tools, interfaces, APIs, platforms, or services that utilize or are derived from the Licensed Work for the benefit of any third party.
 
-Any use of the Licensed Work in violation of this License will automatically
-terminate your rights under this License for the current and all other
-versions of the Licensed Work. You may contact BNB Chain if you are
-interested in seeking a commercial license.
+Notwithstanding the foregoing, on the date that is 4 years after the date that the Licensor has publicly uploaded the specific code of the Licensed Work that you are using (the “Change Date”), the license herein shall automatically terminate and you shall have the right to then use the Licensed Work pursuant to the terms of the Apache 2.0 license. For purposes of determining the Change Date, the relevant date shall be the date of the first public release of the applicable version of the Licensed Work as recorded in the Licensor’s official public repository.
 
-This License does not grant you any right in any trademark or logo of
-Licensor or its affiliates (provided that you may use a trademark or logo of
-Licensor as expressly required by this License).
+All copies of the original and modified Licensed Work, and derivative works of the Licensed Work, are subject to this License. This License applies separately for each version of the Licensed Work and the Change Date may vary for each version of the Licensed Work released by Licensor. You may only redistribute the Licensed Work or any derivative works under the terms of this License, without modification, and must ensure that any recipient is bound by the terms of this License.
 
-TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED WORK IS PROVIDED ON
-AN “AS IS” BASIS. LICENSOR HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS,
-EXPRESS OR IMPLIED, INCLUDING (WITHOUT LIMITATION) WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND
-TITLE. TO THE FULLEST EXTENT PERMITTED UNDER APPLICABLE LAW, LICENSOR SHALL
-NOT BE LIABLE TO YOU OR ANY OTHER PERSON FOR ANY LOST PROFITS, LOSS OF
-REVENUE OR BUSINESS, COST OF COVER OR ANY INCIDENTAL, SPECIAL OR
-CONSEQUENTIAL DAMAGES OF ANY KIND AND NATURE.
+You must conspicuously display this License on each original or modified copy of the Licensed Work. If you receive the Licensed Work in original or modified form from a third party, the terms and conditions set forth in this License apply to your use of that work.
+
+Any use of the Licensed Work in violation of this License will automatically terminate your rights under this License for the current and all other versions of the Licensed Work. Where reasonably practicable, Licensor may, at its sole discretion, permit reinstatement of rights upon cure of the violation within a reasonable period following notice. You may contact BNB Chain if you are interested in seeking a commercial license.
+
+This License does not grant you any right in any trademark or logo of Licensor or its affiliates (provided that you may use a trademark or logo ofLicensor as expressly required by this License). You may not use the Licensed Work in any manner that suggests endorsement by, affiliation with, or sponsorship by the Licensor or its affiliates.
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED WORK IS PROVIDED ON AN “AS IS” BASIS. LICENSOR HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS, EXPRESS OR IMPLIED, INCLUDING (WITHOUT LIMITATION) WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND TITLE. TO THE FULLEST EXTENT PERMITTED UNDER APPLICABLE LAW, LICENSOR SHALL NOT BE LIABLE TO YOU OR ANY OTHER PERSON FOR ANY LOST PROFITS, LOSS OF REVENUE OR BUSINESS, COST OF COVER OR ANY INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES OF ANY KIND AND NATURE.
+
+WITHOUT LIMITING THE FOREGOING, LICENSOR MAKES NO REPRESENTATION OR WARRANTY THAT THE LICENSED WORK WILL ENABLE THE RECOVERY OF ANY DIGITAL ASSETS OR TOKENS, AND ASSUMES NO RESPONSIBILITY FOR ANY LOSS, FAILURE, OR INABILITY TO RECOVER SUCH ASSETS. ALL USE OF THE LICENSED WORK IS AT YOUR SOLE RISK, INCLUDING ANY TRANSACTIONS, KEY MANAGEMENT, OR INTERACTIONS WITH BLOCKCHAIN NETWORKS. LICENSOR HAS NO OBLIGATION TO PROVIDE ANY MAINTENANCE, SUPPORT, UPDATES, OR CORRECTIONS TO THE LICENSED WORK.
