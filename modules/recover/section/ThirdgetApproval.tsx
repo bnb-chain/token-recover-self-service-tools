@@ -46,7 +46,7 @@ export const GetApproval = () => {
   };
 
   return (
-    <SectionWrapper title="3. Input signed result from wallet to get approval">
+    <SectionWrapper title="3. Submit Signed Result to Get Approval">
       <div className="space-y-4">
         <Input
           label="Symbol"
@@ -55,13 +55,13 @@ export const GetApproval = () => {
           placeholder="Enter token symbol"
         />
         <Input
-          label="Public Key"
+          label="Public Key (bbcSigned.publicKey)"
           value={publicKey}
           onChange={(v) => { setPublicKey(v); setError(""); }}
           placeholder="Enter public key (0x + 66 hex chars)"
         />
         <Input
-          label="Signature"
+          label="Signature (bbcSigned.signature)"
           value={signature}
           onChange={(v) => { setSignature(v); setError(""); }}
           placeholder="Enter signature (0x-prefixed hex)"

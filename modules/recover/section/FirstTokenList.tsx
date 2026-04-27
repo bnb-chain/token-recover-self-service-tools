@@ -3,6 +3,78 @@ import { ERecoverStatus, getRecoverList, RecoverToken } from "../server/recover"
 import { SectionWrapper } from '@/modules/recover/components/SectionWrapper';
 import { Input, Button } from '@/modules/recover/components';
 import { isValidBBCAddress } from '@/modules/recover/utils/validation';
+import { secondsToTimeString } from '@/modules/recover/utils/time';
+import { BSC_EXPLORER_URL } from '@/modules/recover/constants';
+
+const UNBOUND_TOKEN_TIP =
+  'This is an unbound token; it cannot be recovered to BNB Chain via this tool. ' +
+  'Please contact the project owner about how to migrate this asset.';
+
+const StatusCell = ({ token }: { token: RecoverToken }) => {
+  switch (token.status) {
+    case ERecoverStatus.Pending:
+      return (
+        <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 text-xs font-medium">
+          Ready to Recover
+        </span>
+      );
+
+    case ERecoverStatus.Requested:
+    case ERecoverStatus.Locked:
+    case ERecoverStatus.Withdrawing: {
+      const remaining = token.unlock_at - Math.floor(Date.now() / 1000);
+      return (
+        <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">
+          {remaining > 0 ? `${secondsToTimeString(remaining)} remaining` : "Unlocking…"}
+        </span>
+      );
+    }
+
+    case ERecoverStatus.NotBounded:
+      return (
+        <span
+          className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm font-medium cursor-help"
+          title={UNBOUND_TOKEN_TIP}
+        >
+          Unable to Recover
+          <span
+            aria-hidden
+            className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-600 text-[10px] text-gray-700 dark:text-gray-200"
+          >
+            ?
+          </span>
+        </span>
+      );
+
+    case ERecoverStatus.Unlocked: {
+      const url =
+        token.symbol === "BNB"
+          ? `${BSC_EXPLORER_URL}/address/${token.recipient_address}`
+          : `${BSC_EXPLORER_URL}/token/${token.contract_address}?a=${token.recipient_address}`;
+      return (
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          Check on BSC
+          <span aria-hidden>↗</span>
+        </a>
+      );
+    }
+
+    case ERecoverStatus.Cancelled:
+      return (
+        <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+          Cancelled
+        </span>
+      );
+
+    default:
+      return <span className="text-gray-400 text-sm">—</span>;
+  }
+};
 
 export const TokenList = () => {
   const [list, setList] = useState<RecoverToken[]>([]);
@@ -23,7 +95,7 @@ export const TokenList = () => {
   };
 
   return (
-    <SectionWrapper title="1. Input your beacon chain address to get the list of tokens you can recover">
+    <SectionWrapper title="1. Input Your Beacon Chain Address to Get Recoverable Tokens">
       <div className="space-y-4">
         <Input
           label="Beacon Chain Address"
@@ -71,8 +143,8 @@ export const TokenList = () => {
                   <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-green-600 dark:text-green-400">
                     {item.amount}
                   </td>
-                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-blue-600 dark:text-blue-400">
-                    {ERecoverStatus[item.status]}
+                  <td className="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                    <StatusCell token={item} />
                   </td>
                 </tr>
               ))}

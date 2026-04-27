@@ -63,19 +63,19 @@ export const RecoverAsset = () => {
   };
 
   return (
-    <SectionWrapper title="4. Recover Asset(bsc chain)">
+    <SectionWrapper title="4. Recover Asset (BNB Chain)">
       <div className="space-y-4">
         <Input
-          label="Symbol"
+          label="Symbol (same as Step 2)"
           value={symbol}
           onChange={(v) => { setSymbol(v); setError(""); }}
-          placeholder="Enter token symbol"
+          placeholder="Enter the same token symbol used in Step 2"
         />
         <Input
-          label="Amount"
+          label="Amount (same as Step 2)"
           value={amount}
           onChange={(v) => { setAmount(v); setError(""); }}
-          placeholder="Enter amount"
+          placeholder="Enter the same amount used in Step 2"
         />
         <Input
           label="Owner Signature (bbcSigned.signature)"
@@ -101,6 +101,11 @@ export const RecoverAsset = () => {
           onChange={(v) => { setMerkleProof(v); setError(""); }}
           placeholder='Enter merkle proof as JSON array (["0x...", ...])'
         />
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          <strong>Note:</strong> Both the Owner Signature (from the wallet) and the Approval Signature
+          (from the server) must be <code>0x</code>-prefixed. If either is missing the prefix, prepend
+          <code> 0x</code> before submitting.
+        </p>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button
           onClick={handleRecover}
@@ -118,7 +123,7 @@ export const RecoverAsset = () => {
           {JSON.stringify(recoverPayload, null, 2)}
         </pre>
       </div>
-      <label>call contract <Strong>recover</Strong> function</label>
+      <label>Call contract <Strong>recover</Strong> function</label>
       Contract: <a
         href="https://bscscan.com/address/0x0000000000000000000000000000000000003000"
         className="text-blue-500 hover:text-blue-700 underline"
@@ -128,19 +133,20 @@ export const RecoverAsset = () => {
       </a>
       <div>
         <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto">
-          {`const [receipt, err] = await contract
-    .recover(
-      recoverPayload.tokenSymbol,
-      recoverPayload.amount,
-      recoverPayload.ownerPubKey,
-      recoverPayload.ownerSignature,
-      recoverPayload.approvalSignature,
-      recoverPayload.merkleProof,
-      {
-        gasLimit: SECURITY_RECOVER_GAS_LIMIT,
-      },
-    )
-    .then(resolve, commonFault);
+          {`const SECURITY_RECOVER_GAS_LIMIT = 1000000;
+
+const receipt = await contract.recover(
+  recoverPayload.tokenSymbol,
+  recoverPayload.amount,
+  recoverPayload.ownerPubKey,
+  recoverPayload.ownerSignature,
+  recoverPayload.approvalSignature,
+  recoverPayload.merkleProof,
+  {
+    gasLimit: SECURITY_RECOVER_GAS_LIMIT,
+  },
+);
+console.log(receipt);
 `}
         </pre>
       </div>
