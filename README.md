@@ -1,5 +1,7 @@
 # Token Recover Self-Service Tools
 
+> ⚖️ **License**: source-available, non-commercial use only. Auto-converts to Apache 2.0 four years after upload — see [LICENSE](LICENSE).
+
 A self-service web tool for recovering BEP2/BEP8 tokens from BNB Beacon Chain to [BNB Chain (BSC)](https://www.bnbchain.org/en/bnb-smart-chain).
 
 ## Overview
@@ -9,11 +11,11 @@ After the BNB Beacon Chain sunset, users can recover their tokens on BNB Chain u
 1. **Get Recoverable Tokens** — Input your Beacon Chain address to view tokens eligible for recovery.
 2. **Generate Sign Message** — Build a message and sign it with your Beacon Chain wallet (e.g., Trust Wallet).
 3. **Get Approval** — Submit the signed result to the server to receive Merkle proofs and an approval signature.
-4. **Recover Asset on BNB Chain** — Use the generated payload to call the BNB Chain recovery contract.
+4. **Build Recover Payload** — Generate the payload, then call the `recover` function on the BNB Chain recovery contract yourself with a BNB Chain wallet.
 
 ## Prerequisites
 
-- Node.js >= 22.0.0
+- Node.js >= 24.0.0
 - npm, yarn, pnpm, or bun
 
 ## Getting Started
@@ -36,6 +38,8 @@ npm install
 ```bash
 cp .env.example .env.local
 ```
+
+   To target testnet, set `NEXT_PUBLIC_APPROVAL_API=https://testnet-token-recover-api.bnbchain.org` in `.env.local`. The BSC explorer link will automatically switch to `testnet.bscscan.com` (see `modules/recover/constants.ts`).
 
 4. Start the development server:
 
@@ -82,8 +86,9 @@ const bbcSigned = await window.TrustBinanceChain.bnbSign(
   beaconChainAddress,
   messageToSign,
 );
-console.log(bbcSigned);
-// Example bbcSigned result:
+// Never print the full signature in production builds.
+console.log("Signed; bbcSigned ready");
+// Example bbcSigned result (do not log this in production):
 // {
 //   "signature": "0xe4838ff411975a210cb15d5c950b53835f5d5bb7b0ebb8dbc4515541bb01181e408f7cbbdab08c9278a623667909e8c3c39fee8c3df65de65df4aec0c48f4196",
 //   "publicKey": "0x030771d42cc0a93289bf457e575bdb42c0d56fcf5953df6614b1b7de2986ce941c"
@@ -144,7 +149,9 @@ Server Approval (`bbcApproval`):
 
 ```
 
-### 4. Recover Asset (BNB Chain)
+### 4. Build Recover Payload (BNB Chain)
+
+> **This step only generates the payload locally — no transaction is broadcast here.** You must call the contract's `recover` function yourself with a BNB Chain wallet that holds BNB for gas.
 
 Params:
 - Symbol (same as Step 2): `CAKE-435`
@@ -195,6 +202,14 @@ Recover Payload (params for the contract `recover` function):
 }
 ```
 
+> **Encoding note:** `tokenSymbol` is `bytes32` (encoded via `ethers.encodeBytes32String`); `amount` is `uint256` (encoded via `ethers.toBeHex`). Both ethers and viem accept these hex strings natively when calling the contract.
+
+#### Account & gas
+
+Two different wallets are involved:
+- **Step 2** signs offline with your **Beacon Chain** wallet — no gas required.
+- **Step 4** payload is broadcast by the **BNB Chain key for `To BSC Address`** (the address you supplied in Step 2). That account must hold BNB to pay the transaction gas.
+
 =>
 
 Call the `recover` function on the BNB Chain recovery contract with the payload above. The contract address is [`0x0000000000000000000000000000000000003000`](https://bscscan.com/address/0x0000000000000000000000000000000000003000).
@@ -213,6 +228,7 @@ const receipt = await contract.recover(
     gasLimit: SECURITY_RECOVER_GAS_LIMIT,
   },
 );
+// 'receipt' is the tx receipt — safe to log; never print the payload's signatures.
 console.log(receipt);
 ```
 

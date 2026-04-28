@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { SectionWrapper } from "@/modules/recover/components/SectionWrapper";
 import { Input, Button } from "@/modules/recover/components";
 import { strTo32Bytes } from "@/modules/recover/utils/number";
@@ -8,6 +9,15 @@ import BigNumber from "bignumber.js";
 import { Strong } from "@/modules/recover/components/Strong";
 import { isValidPublicKey, isValidHexSignature, isValidAmount, isValidMerkleProof } from "@/modules/recover/utils/validation";
 
+type RecoverPayload = {
+  tokenSymbol: string;
+  amount: string;
+  ownerSignature: string;
+  ownerPubKey: string;
+  approvalSignature: string;
+  merkleProof: string[];
+};
+
 export const RecoverAsset = () => {
   const [symbol, setSymbol] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
@@ -15,10 +25,10 @@ export const RecoverAsset = () => {
   const [ownerPubKey, setOwnerPubKey] = useState<string>("");
   const [approvalSignature, setApprovalSignature] = useState<string>("");
   const [merkleProof, setMerkleProof] = useState<string>("[]");
-  const [recoverPayload, setRecoverPayload] = useState<object | null>(null);
+  const [generatedPayload, setGeneratedPayload] = useState<RecoverPayload | null>(null);
   const [error, setError] = useState<string>("");
 
-  const handleRecover = () => {
+  const handleGeneratePayload = () => {
     if (!symbol.trim()) {
       setError("Token symbol is required.");
       return;
@@ -51,7 +61,7 @@ export const RecoverAsset = () => {
       .toFixed();
 
     setError("");
-    const payload = {
+    const payload: RecoverPayload = {
       tokenSymbol: strTo32Bytes(symbol),
       amount: ethers.toBeHex(BigInt(_amount)),
       ownerSignature,
@@ -59,11 +69,11 @@ export const RecoverAsset = () => {
       approvalSignature,
       merkleProof: parsedProof,
     };
-    setRecoverPayload(payload);
+    setGeneratedPayload(payload);
   };
 
   return (
-    <SectionWrapper title="4. Recover Asset (BNB Chain)">
+    <SectionWrapper title="4. Build Recover Payload (BNB Chain)">
       <div className="space-y-4">
         <Input
           label="Symbol (same as Step 2)"
@@ -107,20 +117,21 @@ export const RecoverAsset = () => {
           <code> 0x</code> before submitting.
         </p>
         {error && <p className="text-sm text-red-500">{error}</p>}
-        <Button
-          onClick={handleRecover}
-          variant="primary"
-        >
-          Recover Asset
+        <Button onClick={handleGeneratePayload} variant="primary">
+          Generate Payload
         </Button>
+      </div>
+      <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-100">
+        <strong>This step only generates the payload.</strong> No transaction is broadcast here.
+        You must call the contract&apos;s <code>recover</code> function yourself with a BNB Chain
+        wallet that holds BNB for gas — see the code example below.
       </div>
       <div className="mt-4 flex flex-col gap-2">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Recover Payload(Call contract <Strong>recover</Strong> function
-          params):
+          Generated Payload (params for the contract <Strong>recover</Strong> function):
         </label>
         <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto">
-          {JSON.stringify(recoverPayload, null, 2)}
+          {JSON.stringify(generatedPayload, null, 2)}
         </pre>
       </div>
       <label>Call contract <Strong>recover</Strong> function</label>
@@ -146,6 +157,7 @@ const receipt = await contract.recover(
     gasLimit: SECURITY_RECOVER_GAS_LIMIT,
   },
 );
+// 'receipt' is the tx receipt — safe to log; never print the payload's signatures.
 console.log(receipt);
 `}
         </pre>

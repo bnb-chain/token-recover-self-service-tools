@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import {
   Input,
   Select,
@@ -67,6 +68,7 @@ export const BBCSignMessage = () => {
           if (!symbol.trim()) { setError("Token symbol is required."); return; }
           if (!isValidAmount(amount)) { setError("Amount must be a positive number."); return; }
           if (!isValidBSCAddress(recoverToAddress)) { setError("Invalid BSC address. Must be 0x followed by 40 hex characters."); return; }
+          if (!Object.values(networkMapping).includes(chainId)) { setError("Invalid network."); return; }
           setError("");
           const _amount = new BigNumber(amount)
             .multipliedBy(BEACON_CHAIN_DECIMAL)
@@ -107,11 +109,12 @@ const bbcSigned = await window.TrustBinanceChain.bnbSign(
   beaconChainAddress,
   messageToSign
 );
-console.log(bbcSigned);
-// Example bbcSigned result:
+// Never print the full signature in production builds.
+console.log("Signed; bbcSigned ready");
+// Example bbcSigned shape (do not log this in production):
 // {
-//   "signature": "0xe4838ff411975a210cb15d5c950b53835f5d5bb7b0ebb8dbc4515541bb01181e408f7cbbdab08c9278a623667909e8c3c39fee8c3df65de65df4aec0c48f4196",
-//   "publicKey": "0x030771d42cc0a93289bf457e575bdb42c0d56fcf5953df6614b1b7de2986ce941c"
+//   "signature": "0x...",
+//   "publicKey": "0x..."
 // }`}
           </code>
         </pre>

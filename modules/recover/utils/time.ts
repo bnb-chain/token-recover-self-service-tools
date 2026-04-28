@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 export const secondsToTimeString = (seconds: number): string => {
   if (seconds <= 0) return "0s";
   const days = Math.floor(seconds / 86400);

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { ethers } from 'ethers';
 
 export const numTo32Bytes = (amount: string) => {

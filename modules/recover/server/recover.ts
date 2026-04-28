@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import axios from 'axios';
 
 import { ErrorResponse, commonFault } from './common';
@@ -36,8 +37,17 @@ export const getApproval = async (
         'Content-Type': 'application/json',
       },
     });
-    const data = response.data;
-    return [data.data, null];
+    const body = response.data;
+    // Backend returns 200 with { code: number, error?: string, data?: T }.
+    // code 0 = success; anything else is an application-level error and
+    // would otherwise be silently swallowed (data.data === undefined).
+    if (body && typeof body.code === 'number' && body.code !== 0) {
+      return [null, body.error || body.message || `Request failed (code ${body.code})`];
+    }
+    if (!body?.data) {
+      return [null, 'Empty response from approval server.'];
+    }
+    return [body.data, null];
   } catch (error) {
     return commonFault(error);
   }

@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { useState } from "react";
 import { getApproval, GetApprovalResponse } from "../server/recover";
 import { SectionWrapper } from '@/modules/recover/components/SectionWrapper';
-import { Input, Button } from '@/modules/recover/components';
+import { Input, Button, ErrorModal } from '@/modules/recover/components';
 import { Strong } from '@/modules/recover/components/Strong';
 import { isValidBSCAddress, isValidPublicKey, isValidHexSignature } from '@/modules/recover/utils/validation';
 
@@ -13,6 +14,7 @@ export const GetApproval = () => {
   const [serverApproval, setServerApproval] =
     useState<GetApprovalResponse | null>(null);
   const [error, setError] = useState<string>("");
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const handleGetApproval = async () => {
     if (!symbol.trim()) {
@@ -32,6 +34,7 @@ export const GetApproval = () => {
       return;
     }
     setError("");
+    setServerError(null);
     const [approval, err] = await getApproval({
       token_symbol: symbol,
       owner_pub_key: publicKey,
@@ -39,7 +42,8 @@ export const GetApproval = () => {
       claim_address: toAddress,
     });
     if (err) {
-      setError(err || "Failed to get approval.");
+      setServerApproval(null);
+      setServerError(err || "Failed to get approval.");
     } else {
       setServerApproval(approval);
     }
@@ -86,6 +90,11 @@ export const GetApproval = () => {
           {JSON.stringify(serverApproval, null, 2)}
         </pre>
       </div>
+      <ErrorModal
+        title="Approval Failed"
+        message={serverError}
+        onClose={() => setServerError(null)}
+      />
     </SectionWrapper>
   );
 };

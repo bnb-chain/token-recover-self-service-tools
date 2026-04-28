@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { BBCSignMessage } from "@/modules/recover/section/SecondBBCSignMessage";
 import { TokenList } from "./section/FirstTokenList";
 import { GetApproval } from "@/modules/recover/section/ThirdgetApproval";
@@ -27,6 +28,11 @@ export const Recover = () => {
               README
             </a>
             .
+          </p>
+          <p className="text-sm leading-relaxed text-amber-900/90 dark:text-amber-100/90">
+            <strong>Two wallets:</strong> Step 2 signs offline with your Beacon Chain wallet (no gas).
+            Step 4 only generates a payload — broadcasting the <code>recover</code> tx requires the
+            BNB Chain key for <em>To BSC Address</em>, which must hold BNB for gas.
           </p>
         </div>
       </div>

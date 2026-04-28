@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { useState } from "react";
 import { ERecoverStatus, getRecoverList, RecoverToken } from "../server/recover";
 import { SectionWrapper } from '@/modules/recover/components/SectionWrapper';

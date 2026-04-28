@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 export const BEACON_CHAIN_DECIMAL = 10 ** 8;
 export const SECURITY_RECOVER_GAS_LIMIT = 1000000;
 

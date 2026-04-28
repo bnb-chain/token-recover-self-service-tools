@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import Head from 'next/head';
 import { Recover } from '@/modules/recover';
 
