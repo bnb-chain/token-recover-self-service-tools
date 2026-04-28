@@ -122,12 +122,12 @@ console.log("Signed; bbcSigned ready");
           <strong>Note:</strong> The <code>signature</code> returned by the wallet may not be <code>0x</code>-prefixed.
           Make sure to prepend <code>0x</code> if it&apos;s missing before using the signature in the next steps.
         </p>
-      </div>
-      <div className="flex flex-col gap-2">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          After signing, you should get a signed result (referred to as <Strong>bbcSigned</Strong> in the next steps),
-          containing the wallet&apos;s <code>signature</code> and <code>publicKey</code>. Keep this result — you&apos;ll
-          need both fields to request the approval and to recover the asset.
+          <strong>Security:</strong> <code>window.TrustBinanceChain</code> is a plain global —
+          any browser extension can inject or override it (and <code>provider.isTrust</code> can be
+          set by anyone). Before signing, make sure only the legitimate Trust Wallet extension is
+          enabled and you&apos;re not on a shared/untrusted browser. Avoid signing with multiple
+          wallet extensions installed simultaneously.
         </p>
       </div>
     </SectionWrapper>

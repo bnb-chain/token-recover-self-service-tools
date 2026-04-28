@@ -97,6 +97,8 @@ console.log("Signed; bbcSigned ready");
 
 > **Note:** The `signature` returned by the wallet may not be `0x`-prefixed. If the `0x` prefix is missing, prepend it before using the signature in the next steps.
 
+> **Security:** `window.TrustBinanceChain` is a plain global — any browser extension can inject or override it (and `provider.isTrust` can be set by anyone). Before signing, make sure only the legitimate Trust Wallet extension is enabled and you're not on a shared/untrusted browser. Avoid signing with multiple wallet extensions installed simultaneously.
+
 =>
 
 Result returned by Trust Wallet (`bbcSigned`):
