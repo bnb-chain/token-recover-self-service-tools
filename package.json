@@ -21,7 +21,7 @@
     "bignumber.js": "9.0.0",
     "ethers": "6.16.0",
     "next": "15.5.15",
-    "react": "19.1.0",
+    "react": "19.2.5",
     "react-dom": "19.1.0"
   },
   "engines": {
@@ -31,7 +31,7 @@
     "@eslint/eslintrc": "3.3.1",
     "@tailwindcss/postcss": "4.1.12",
     "@types/node": "24.12.2",
-    "@types/react": "19.1.10",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.1.7",
     "eslint": "9.33.0",
     "eslint-config-next": "15.5.15",
