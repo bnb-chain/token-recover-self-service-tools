@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { numTo32Bytes, strTo32Bytes } from './number';
 import { convertObjectToSignBytes } from './encoder';
 

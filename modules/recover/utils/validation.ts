@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 /** BBC (Beacon Chain) bech32 address: starts with bnb1, 39 chars total */
 export const isValidBBCAddress = (address: string): boolean =>
   /^bnb1[a-z0-9]{38}$/.test(address);

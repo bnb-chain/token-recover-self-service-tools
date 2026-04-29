@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import { useState } from "react";
 import { getApproval, GetApprovalResponse } from "../server/recover";
 import { SectionWrapper } from '@/modules/recover/components/SectionWrapper';
-import { Input, Button } from '@/modules/recover/components';
+import { Input, Button, ErrorModal } from '@/modules/recover/components';
 import { Strong } from '@/modules/recover/components/Strong';
 import { isValidBSCAddress, isValidPublicKey, isValidHexSignature } from '@/modules/recover/utils/validation';
 
@@ -13,6 +14,7 @@ export const GetApproval = () => {
   const [serverApproval, setServerApproval] =
     useState<GetApprovalResponse | null>(null);
   const [error, setError] = useState<string>("");
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const handleGetApproval = async () => {
     if (!symbol.trim()) {
@@ -32,6 +34,7 @@ export const GetApproval = () => {
       return;
     }
     setError("");
+    setServerError(null);
     const [approval, err] = await getApproval({
       token_symbol: symbol,
       owner_pub_key: publicKey,
@@ -39,14 +42,15 @@ export const GetApproval = () => {
       claim_address: toAddress,
     });
     if (err) {
-      setError(err || "Failed to get approval.");
+      setServerApproval(null);
+      setServerError(err || "Failed to get approval.");
     } else {
       setServerApproval(approval);
     }
   };
 
   return (
-    <SectionWrapper title="3. Input signed result from wallet to get approval">
+    <SectionWrapper title="3. Submit Signed Result to Get Approval">
       <div className="space-y-4">
         <Input
           label="Symbol"
@@ -55,13 +59,13 @@ export const GetApproval = () => {
           placeholder="Enter token symbol"
         />
         <Input
-          label="Public Key"
+          label="Public Key (bbcSigned.publicKey)"
           value={publicKey}
           onChange={(v) => { setPublicKey(v); setError(""); }}
           placeholder="Enter public key (0x + 66 hex chars)"
         />
         <Input
-          label="Signature"
+          label="Signature (bbcSigned.signature)"
           value={signature}
           onChange={(v) => { setSignature(v); setError(""); }}
           placeholder="Enter signature (0x-prefixed hex)"
@@ -86,6 +90,11 @@ export const GetApproval = () => {
           {JSON.stringify(serverApproval, null, 2)}
         </pre>
       </div>
+      <ErrorModal
+        title="Approval Failed"
+        message={serverError}
+        onClose={() => setServerError(null)}
+      />
     </SectionWrapper>
   );
 };

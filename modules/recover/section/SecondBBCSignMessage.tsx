@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 import {
   Input,
   Select,
@@ -13,17 +14,15 @@ import { useState } from "react";
 import { isValidBSCAddress, isValidAmount } from "@/modules/recover/utils/validation";
 
 export const networkMapping = {
-  "bsc-mainnet": "0x38",
-  "bsc-testnet": "0x61",
-  "bbc-mainnet": "Binance-Chain-Tigris",
-  "bbc-testnet": "Binance-Chain-Ganges",
+  "Beacon Chain Mainnet": "Binance-Chain-Tigris",
+  "Beacon Chain Testnet": "Binance-Chain-Ganges",
 };
 
 export const BBCSignMessage = () => {
   const [recoverToAddress, setRecoverToAddress] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [symbol, setSymbol] = useState<string>("");
-  const [chainId, setChainId] = useState<string>('bbc-mainnet');
+  const [chainId, setChainId] = useState<string>('Binance-Chain-Tigris');
   const [bytes, setBytes] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -35,7 +34,7 @@ export const BBCSignMessage = () => {
   );
 
   return (
-    <SectionWrapper title="2. Input recover params to generate sign message for wallet to sign(beacon chain)">
+    <SectionWrapper title="2. Generate Sign Message for Wallet to Sign (Beacon Chain)">
       <div className="space-y-4">
         <Input
           label="Symbol"
@@ -56,11 +55,11 @@ export const BBCSignMessage = () => {
           placeholder="Enter recovery address"
         />
         <Select
-          label="Network(Select bbc-mainnet)"
+          label="Network (default: Beacon Chain Mainnet)"
           value={chainId}
           onChange={setChainId}
           options={networkOptions}
-          placeholder="Please select network"
+          placeholder="Please select a network"
         />
       </div>
       {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
@@ -69,7 +68,9 @@ export const BBCSignMessage = () => {
           if (!symbol.trim()) { setError("Token symbol is required."); return; }
           if (!isValidAmount(amount)) { setError("Amount must be a positive number."); return; }
           if (!isValidBSCAddress(recoverToAddress)) { setError("Invalid BSC address. Must be 0x followed by 40 hex characters."); return; }
+          if (!Object.values(networkMapping).includes(chainId)) { setError("Invalid network."); return; }
           setError("");
+          // Convert human-readable amount to base units (×10^8 for BEP2/BEP8).
           const _amount = new BigNumber(amount)
             .multipliedBy(BEACON_CHAIN_DECIMAL)
             .toFixed();
@@ -83,11 +84,11 @@ export const BBCSignMessage = () => {
         }}
         variant="primary"
       >
-        Beacon chain sign message
+        Generate Sign Message
       </Button>
       <div className="flex flex-col gap-2">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Bytes:
+          messageToSign:
         </label>
         <textarea
           rows={3}
@@ -98,28 +99,37 @@ export const BBCSignMessage = () => {
       </div>
       <div className="flex flex-col gap-2">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          For wallet to sign code:
+          Wallet sign code example:
         </label>
         <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
           <code className="text-gray-800 dark:text-gray-200">
-{`const [_approvalSignature, err1] = await walletProvider?.bnbSign(
-  address,
-  bytes
+{`// beaconChainAddress: string — the bnb1... Beacon Chain address
+// messageToSign: string — the JSON message shown above
+// Sign the message with the Beacon Chain wallet (e.g., Trust Wallet)
+const bbcSigned = await window.TrustBinanceChain.bnbSign(
+  beaconChainAddress,
+  messageToSign
 );
-
-const approvalSignature = {
-  ..._approvalSignature,
-  publicKey: _approvalSignature.publicKey,
-  // Handle the case where the signature is not prefixed with 0x
-  signature: _approvalSignature.signature.startsWith('0x')
-    ? _approvalSignature.signature
-    : '0x' + _approvalSignature.signature,
-};`}
+// Never print the full signature in production builds.
+console.log("Signed; bbcSigned ready");
+// Example bbcSigned shape (do not log this in production):
+// {
+//   "signature": "0x...",
+//   "publicKey": "0x..."
+// }`}
           </code>
         </pre>
-      </div>
-      <div className="flex flex-col gap-2">
-        ===&gt; <Strong>bbcSigned</Strong>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          <strong>Note:</strong> The <code>signature</code> returned by the wallet may not be <code>0x</code>-prefixed.
+          Make sure to prepend <code>0x</code> if it&apos;s missing before using the signature in the next steps.
+        </p>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          <strong>Security:</strong> <code>window.TrustBinanceChain</code> is a plain global —
+          any browser extension can inject or override it (and <code>provider.isTrust</code> can be
+          set by anyone). Before signing, make sure only the legitimate Trust Wallet extension is
+          enabled and you&apos;re not on a shared/untrusted browser. Avoid signing with multiple
+          wallet extensions installed simultaneously.
+        </p>
       </div>
     </SectionWrapper>
   );

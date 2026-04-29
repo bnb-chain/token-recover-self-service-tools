@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LicenseRef-Innovation-Enabling
 export interface SelectOption {
   value: string;
   label: string;
