@@ -4,7 +4,7 @@ import { Input, Button } from "@/modules/recover/components";
 import { strTo32Bytes } from "@/modules/recover/utils/number";
 import { ethers } from "ethers";
 import { useState } from "react";
-import { BEACON_CHAIN_DECIMAL, IS_TESTNET } from "@/modules/recover/constants";
+import { BEACON_CHAIN_DECIMAL } from "@/modules/recover/constants";
 import BigNumber from "bignumber.js";
 import { Strong } from "@/modules/recover/components/Strong";
 import { isValidPublicKey, isValidHexSignature, isValidAmount, isValidMerkleProof } from "@/modules/recover/utils/validation";
@@ -18,46 +18,6 @@ type RecoverPayload = {
   merkleProof: string[];
 };
 
-type SimulateResult = { ok: true; message: string } | { ok: false; message: string };
-
-const RECOVER_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000003000";
-
-// Full ABI including custom errors so ethers can decode revert reasons.
-// Source: bnb-chain/bsc-genesis-contract/contracts/TokenRecoverPortal.sol
-const RECOVER_ABI = [
-  "function recover(bytes32 tokenSymbol, uint256 amount, bytes ownerPubKey, bytes ownerSignature, bytes approvalSignature, bytes32[] merkleProof) external",
-  "error AlreadyRecovered()",
-  "error InvalidProof()",
-  "error InvalidApprovalSignature()",
-  "error InvalidOwnerPubKeyLength()",
-  "error InvalidOwnerSignatureLength()",
-  "error MerkleRootNotInitialized()",
-  "error TokenRecoverPortalPaused()",
-  "error ApprovalAddressNotInitialized()",
-];
-
-// Human-friendly hint per contract error.
-const ERROR_HINTS: Record<string, string> = {
-  AlreadyRecovered:
-    "This token has already been recovered. Either you submitted it before, or another claim landed first.",
-  InvalidProof:
-    "The merkle proof is not valid against the current on-chain merkle root. Re-fetch the approval in Step 3.",
-  InvalidApprovalSignature:
-    "The server's approval signature did not verify. Re-fetch the approval in Step 3.",
-  InvalidOwnerPubKeyLength:
-    "Owner public key must be exactly 33 bytes (a 0x-prefixed hex string of length 68).",
-  InvalidOwnerSignatureLength:
-    "Owner signature must be exactly 64 bytes (a 0x-prefixed hex string of length 130).",
-  MerkleRootNotInitialized: "The contract's merkle root is not initialized yet.",
-  TokenRecoverPortalPaused: "The token recover portal is paused on-chain.",
-  ApprovalAddressNotInitialized: "The contract's approval address is not initialized yet.",
-};
-
-// Public BSC RPCs already covered by the CSP connect-src whitelist (*.bnbchain.org).
-const SIMULATE_RPC_URL = IS_TESTNET
-  ? "https://bsc-testnet-dataseed.bnbchain.org"
-  : "https://bsc-dataseed.bnbchain.org";
-
 export const RecoverAsset = () => {
   const [symbol, setSymbol] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
@@ -67,8 +27,6 @@ export const RecoverAsset = () => {
   const [merkleProof, setMerkleProof] = useState<string>("[]");
   const [generatedPayload, setGeneratedPayload] = useState<RecoverPayload | null>(null);
   const [error, setError] = useState<string>("");
-  const [simulating, setSimulating] = useState<boolean>(false);
-  const [simulateResult, setSimulateResult] = useState<SimulateResult | null>(null);
 
   const handleGeneratePayload = () => {
     if (!symbol.trim()) {
@@ -98,12 +56,12 @@ export const RecoverAsset = () => {
       return;
     }
 
+    // Convert human-readable amount to base units (×10^8 for BEP2/BEP8).
     const _amount = new BigNumber(amount)
       .multipliedBy(BEACON_CHAIN_DECIMAL)
       .toFixed();
 
     setError("");
-    setSimulateResult(null);
     const payload: RecoverPayload = {
       tokenSymbol: strTo32Bytes(symbol),
       amount: ethers.toBeHex(BigInt(_amount)),
@@ -113,46 +71,6 @@ export const RecoverAsset = () => {
       merkleProof: parsedProof,
     };
     setGeneratedPayload(payload);
-  };
-
-  const handleSimulate = async () => {
-    if (!generatedPayload) return;
-    setSimulating(true);
-    setSimulateResult(null);
-    try {
-      const provider = new ethers.JsonRpcProvider(SIMULATE_RPC_URL);
-      const contract = new ethers.Contract(RECOVER_CONTRACT_ADDRESS, RECOVER_ABI, provider);
-      await contract.recover.staticCall(
-        generatedPayload.tokenSymbol,
-        generatedPayload.amount,
-        generatedPayload.ownerPubKey,
-        generatedPayload.ownerSignature,
-        generatedPayload.approvalSignature,
-        generatedPayload.merkleProof,
-      );
-      setSimulateResult({
-        ok: true,
-        message: "Static call succeeded — the contract would accept this payload at the current head.",
-      });
-    } catch (err: unknown) {
-      const e = err as {
-        revert?: { name?: string };
-        reason?: string;
-        shortMessage?: string;
-        message?: string;
-      };
-      const errorName = e?.revert?.name;
-      if (errorName && ERROR_HINTS[errorName]) {
-        setSimulateResult({ ok: false, message: `${errorName}: ${ERROR_HINTS[errorName]}` });
-      } else if (errorName) {
-        setSimulateResult({ ok: false, message: errorName });
-      } else {
-        const reason = e?.reason || e?.shortMessage || e?.message || "Unknown error";
-        setSimulateResult({ ok: false, message: reason });
-      }
-    } finally {
-      setSimulating(false);
-    }
   };
 
   return (
@@ -200,31 +118,9 @@ export const RecoverAsset = () => {
           <code> 0x</code> before submitting.
         </p>
         {error && <p className="text-sm text-red-500">{error}</p>}
-        <div className="flex flex-wrap gap-3">
-          <Button onClick={handleGeneratePayload} variant="primary">
-            Generate Payload
-          </Button>
-          <Button
-            onClick={handleSimulate}
-            variant="secondary"
-            disabled={!generatedPayload || simulating}
-          >
-            {simulating ? "Simulating…" : "Simulate Call"}
-          </Button>
-        </div>
-        {simulateResult && (
-          <p
-            className={
-              "text-sm " +
-              (simulateResult.ok
-                ? "text-green-600 dark:text-green-400"
-                : "text-red-600 dark:text-red-400")
-            }
-          >
-            <strong>{simulateResult.ok ? "✓ Simulation OK:" : "✗ Simulation reverted:"}</strong>{" "}
-            {simulateResult.message}
-          </p>
-        )}
+        <Button onClick={handleGeneratePayload} variant="primary">
+          Generate Payload
+        </Button>
       </div>
       <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-100">
         <strong>This step only generates the payload.</strong> No transaction is broadcast here.

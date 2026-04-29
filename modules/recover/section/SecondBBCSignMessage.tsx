@@ -70,6 +70,7 @@ export const BBCSignMessage = () => {
           if (!isValidBSCAddress(recoverToAddress)) { setError("Invalid BSC address. Must be 0x followed by 40 hex characters."); return; }
           if (!Object.values(networkMapping).includes(chainId)) { setError("Invalid network."); return; }
           setError("");
+          // Convert human-readable amount to base units (×10^8 for BEP2/BEP8).
           const _amount = new BigNumber(amount)
             .multipliedBy(BEACON_CHAIN_DECIMAL)
             .toFixed();

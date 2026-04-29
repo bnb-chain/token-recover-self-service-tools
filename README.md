@@ -65,7 +65,7 @@ This guide demonstrates how to recover assets from Beacon Chain to BNB Chain Mai
 
 Params:
 - Symbol: `CAKE-435`
-- Amount: `0.00001000`
+- Amount: `0.00001000` *(human-readable units; the tool multiplies by `BEACON_CHAIN_DECIMAL = 10^8` before signing — see `modules/recover/constants.ts`)*
 - To BSC Address: `0x441DE55A37F6C381b00Db8B52DF8f57794784a1A`
 - Network: `Beacon Chain Mainnet`
 
@@ -157,7 +157,7 @@ Server Approval (`bbcApproval`):
 
 Params:
 - Symbol (same as Step 2): `CAKE-435`
-- Amount (same as Step 2): `0.00001000`
+- Amount (same as Step 2): `0.00001000` *(human-readable; the tool scales it by `10^8` in the generated payload below)*
 - Owner Signature (`bbcSigned.signature`): `0xe4838ff411975a210cb15d5c950b53835f5d5bb7b0ebb8dbc4515541bb01181e408f7cbbdab08c9278a623667909e8c3c39fee8c3df65de65df4aec0c48f4196`
 - Owner Public Key (`bbcSigned.publicKey`): `0x030771d42cc0a93289bf457e575bdb42c0d56fcf5953df6614b1b7de2986ce941c`
 - Approval Signature (`bbcApproval.approval_signature`): `0x25f1baa7988bbe8b49c6a163396cc137a37d6df911352655b97176060b9573c006f3f5527b856b38417e2d519465f752d0abcebde7778df774f7e4fccdd2556c01`
@@ -205,6 +205,8 @@ Recover Payload (params for the contract `recover` function):
 ```
 
 > **Encoding note:** `tokenSymbol` is `bytes32` (encoded via `ethers.encodeBytes32String`); `amount` is `uint256` (encoded via `ethers.toBeHex`). Both ethers and viem accept these hex strings natively when calling the contract.
+>
+> **Amount precision:** the human-readable input (e.g. `0.00001000`) is multiplied by `10^8` (BEP2/BEP8 base unit, defined as `BEACON_CHAIN_DECIMAL` in `modules/recover/constants.ts`) before being hex-encoded. So `"amount": "0x03e8"` in the payload above is `1000` base units = `0.00001000` BEP2 tokens.
 
 #### Account & gas
 
