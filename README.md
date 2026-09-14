@@ -64,6 +64,7 @@ This guide demonstrates how to recover assets from Beacon Chain to BNB Chain Mai
 ### 2. Generate Sign Message for Wallet to Sign (Beacon Chain)
 
 Params:
+- Beacon Chain Address: `bnb1nn3h8hm678shs5vxj8a5enjes0uhf7nwf0wq4m` *(filled automatically after Trust Wallet connect if the extension returns a `bnb1` address)*
 - Symbol: `CAKE-435`
 - Amount: `0.00001000` *(human-readable units; the tool multiplies by `BEACON_CHAIN_DECIMAL = 10^8` before signing — see `modules/recover/constants.ts`)*
 - To BSC Address: `0x441DE55A37F6C381b00Db8B52DF8f57794784a1A`
@@ -77,12 +78,18 @@ messageToSign:
 {"account_number":"0","chain_id":"Binance-Chain-Tigris","data":null,"memo":"","msgs":[{"amount":"00000000000000000000000000000000000000000000000000000000000003e8","recipient":"0x441de55a37f6c381b00db8b52df8f57794784a1a","token_symbol":"43414b452d343335000000000000000000000000000000000000000000000000"}],"sequence":"0","source":"0"}
 ```
 
-To sign the message with the Beacon Chain wallet (e.g., Trust Wallet) injected as `window.TrustBinanceChain`, call:
+Trust Wallet will not show the sign modal until the site is connected. In the tool, click **Sign with Trust Wallet** (it connects first, then calls `bnbSign`). From the console, connect before signing:
 
 ```js
+// Trust Wallet requires a connection before bnbSign will show the sign modal.
+const provider = window.TrustBinanceChain ?? window.BinanceChain;
+await provider.requestAccounts();
+// Fallback if requestAccounts is missing:
+// await provider.request({ method: "eth_requestAccounts" });
+
 // beaconChainAddress: string — the bnb1... Beacon Chain address
 // messageToSign: string — the JSON message shown above
-const bbcSigned = await window.TrustBinanceChain.bnbSign(
+const bbcSigned = await provider.bnbSign(
   beaconChainAddress,
   messageToSign,
 );
