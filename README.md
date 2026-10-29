@@ -15,8 +15,8 @@ After the BNB Beacon Chain sunset, users can recover their tokens on BNB Chain u
 
 ## Prerequisites
 
-- Node.js >= 24.0.0
-- npm, yarn, pnpm, or bun
+- Node.js `>=24.22.1 <25` or `>=26.12.1` (see `.nvmrc`; `engine-strict` rejects older runtimes)
+- npm (use the lockfile with `npm ci`; other package managers are not validated in CI)
 
 ## Getting Started
 
@@ -27,10 +27,10 @@ git clone https://github.com/bnb-chain/token-recover-self-service-tools.git
 cd token-recover-self-service-tools
 ```
 
-2. Install dependencies:
+2. Install dependencies from the lockfile:
 
 ```bash
-npm install
+npm ci
 ```
 
 3. (Optional) Configure the API endpoint by creating a `.env.local` file:
@@ -41,16 +41,26 @@ cp .env.example .env.local
 
    To target testnet, set `NEXT_PUBLIC_APPROVAL_API=https://testnet-token-recover-api.bnbchain.org` in `.env.local`. The BSC explorer link will automatically switch to `testnet.bscscan.com` (see `modules/recover/constants.ts`).
 
-4. Start the development server:
+4. For an actual recovery, prefer a production build (smaller attack surface than `next dev`):
+
+```bash
+npm run build
+npm start
+```
+
+   For local UI work only:
 
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+   Both `dev` and `start` bind to `127.0.0.1` so the app is not reachable from other devices on the network.
+
+5. Open [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser.
+
+6. (Optional) After install, you can run `npm audit`. A clean tree should report `0` vulnerabilities. Do **not** run `npm audit fix --force` against an older checkout — that can pull versions outside the ranges this repo pins. Pull the latest `main` instead.
 
 > **⚠️ NOTICE:** Please strictly follow the steps on the page to perform recovery. Before proceeding, please read the step-by-step example and reference screenshot below.
-
 ## Step-by-Step Recovery Example (BNB Chain Mainnet)
 
 > **Note:** The addresses, signatures, and keys below come from a team-controlled test wallet for demonstration purposes only. They do not represent real user data.

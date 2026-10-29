@@ -7,7 +7,18 @@ updates:
     target-branch: main
     labels:
       - dependencies
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
+    groups:
+      production-patch-minor:
+        dependency-type: production
+        update-types:
+          - "patch"
+          - "minor"
+      development-patch-minor:
+        dependency-type: development
+        update-types:
+          - "patch"
+          - "minor"
 
   - package-ecosystem: github-actions
     directory: "/"
@@ -16,3 +27,4 @@ updates:
     labels:
       - dependencies
       - github-actions
+    open-pull-requests-limit: 15
