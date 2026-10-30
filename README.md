@@ -61,6 +61,8 @@ npm run dev
 6. (Optional) After install, you can run `npm audit`. A clean tree should report `0` vulnerabilities. Do **not** run `npm audit fix --force` against an older checkout — that can pull versions outside the ranges this repo pins. Pull the latest `main` instead.
 
 > **⚠️ NOTICE:** Please strictly follow the steps on the page to perform recovery. Before proceeding, please read the step-by-step example and reference screenshot below.
+>
+> **⏳ Waiting Period (~30 Days):** After your `recover()` transaction succeeds on-chain, there is an **on-chain 7-day lock** followed by an **additional 23-day processing delay** (**~30 days in total**). Completion of the 7-day lock (`unlockAt`) does **not** mean immediate arrival — the withdrawal bot will process it automatically afterward. Do not submit a duplicate recovery request.
 ## Step-by-Step Recovery Example (BNB Chain Mainnet)
 
 > **Note:** The addresses, signatures, and keys below come from a team-controlled test wallet for demonstration purposes only. They do not represent real user data.
@@ -252,6 +254,8 @@ const receipt = await contract.recover(
 // 'receipt' is the tx receipt — safe to log; never print the payload's signatures.
 console.log(receipt);
 ```
+
+> **Waiting period (~30 days):** Once your `recover` transaction is confirmed on-chain, the automatic withdrawal service applies an **on-chain 7-day lock** plus an **additional 23-day processing delay** (~30 days in total) before the withdrawal bot automatically releases the tokens to your BSC address. Do not submit a duplicate recovery request.
 
 ## Reference Screenshot
 

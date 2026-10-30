@@ -122,10 +122,19 @@ export const RecoverAsset = () => {
           Generate Payload
         </Button>
       </div>
-      <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-100">
-        <strong>This step only generates the payload.</strong> No transaction is broadcast here.
-        You must call the contract&apos;s <code>recover</code> function yourself with a BNB Chain
-        wallet that holds BNB for gas — see the code example below.
+      <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-100 space-y-1">
+        <p>
+          <strong>This step only generates the payload.</strong> No transaction is broadcast here.
+          You must call the contract&apos;s <code>recover</code> function yourself with a BNB Chain
+          wallet that holds BNB for gas — see the code example below.
+        </p>
+        <p>
+          <strong>Waiting period (~30 days):</strong> After your <code>recover</code> transaction
+          is confirmed, the automatic withdrawal service applies an{" "}
+          <strong>on-chain 7-day lock</strong> plus an{" "}
+          <strong>additional 23-day processing delay</strong> before the withdrawal bot
+          automatically releases the tokens to your BSC address. Do not submit a duplicate recovery request.
+        </p>
       </div>
       <div className="mt-4 flex flex-col gap-2">
         <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
