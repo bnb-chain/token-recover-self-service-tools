@@ -34,6 +34,15 @@ export const Recover = () => {
             Step 4 only generates a payload — broadcasting the <code>recover</code> tx requires the
             BNB Chain key for <em>To BSC Address</em>, which must hold BNB for gas.
           </p>
+          <p className="text-sm leading-relaxed text-amber-900/90 dark:text-amber-100/90">
+            <strong>Waiting period (~30 days):</strong> After your on-chain{" "}
+            <code>recover</code> transaction succeeds, there is an{" "}
+            <strong>on-chain 7-day lock</strong> followed by an{" "}
+            <strong>additional 23-day processing delay</strong> (~30 days in total).
+            Completion of the 7-day lock does <strong>not</strong> mean immediate token
+            arrival — the withdrawal bot will process it automatically afterward. You do
+            not need to submit another recovery request.
+          </p>
         </div>
       </div>
       <TokenList />
