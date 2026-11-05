@@ -33,6 +33,8 @@ cd token-recover-self-service-tools
 npm ci
 ```
 
+   `package.json` records version-pinned install-script approvals for `@tailwindcss/oxide` (Tailwind's native bindings) and `unrs-resolver` (used by the ESLint import resolver). No manual approval is needed for these locked versions. If npm reports unreviewed scripts after an update, inspect them with `npm install-scripts ls` before approving specific package versions. In npm 11.19.1, an unreviewed-script warning alone does not mean the script was blocked; unreviewed scripts still run by default.
+
 3. (Optional) Configure the API endpoint by creating a `.env.local` file:
 
 ```bash
@@ -58,7 +60,7 @@ npm run dev
 
 5. Open [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser.
 
-6. (Optional) After install, you can run `npm audit`. A clean tree should report `0` vulnerabilities. Do **not** run `npm audit fix --force` against an older checkout — that can pull versions outside the ranges this repo pins. Pull the latest `main` instead.
+6. (Optional) After install, you can run `npm audit`. Results use the current advisory database, so new warnings can appear even when the lockfile has not changed. Do **not** run `npm audit fix --force` — that can pull versions outside the ranges this repo pins. Pull the latest `main` and run `npm ci` to use the reviewed dependency updates. If warnings remain, report the full audit output, commit, and Node/npm versions.
 
 > **⚠️ NOTICE:** Please strictly follow the steps on the page to perform recovery. Before proceeding, please read the step-by-step example and reference screenshot below.
 >

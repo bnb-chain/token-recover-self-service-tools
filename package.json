@@ -39,6 +39,13 @@
     "typescript": "5.9.2"
   },
   "overrides": {
-    "postcss": "8.5.23"
+    "postcss": "8.5.23",
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
+    }
+  },
+  "allowScripts": {
+    "@tailwindcss/oxide@4.1.12": true,
+    "unrs-resolver@1.11.1": true
   }
 }
